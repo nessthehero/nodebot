@@ -1,10 +1,12 @@
 var irc = require('irc');
-var tools = require('tools');
+
 var config = require('./config');
 
 var bot = new irc.Client(config.config['server'], config.config['nick'], {
     autoConnect: false
 });
+
+var commands = require('./commands').init(bot);
 
 bot.connect(10, function() {
 
@@ -24,15 +26,21 @@ bot.addListener('join', function () {
 bot.addListener('message', function (from, to, message) {
     console.log(from + ' => ' + to + ': ' + message);
 
-    if (message.toLowerCase() == "gimme a cat") {
-    	var num1 = tools.rint(100, 600);
-    	var num2 = tools.rint(100, 600);
-    	bot.say(to, "here you go: http://placekitten.com/" + num1 + "/" + num2);
+    if (message.match(/gimme a cat/i) != null) {
+    	commands.cat(to);
     }
 
-    if (message.toLowerCase() == "!chans") {
-    	console.log(bot.chans);
+    if (message.match(/meow/i) != null) {
+    	commands.emoji(to);
     }
+
+    if (message.match(/^!pokemon|^!pokeman|^!pokeymans/i) != null) {
+    	commands.pokemon(to, message);
+    }
+
+    // if (message.toLowerCase() == "!chans") {
+    // 	console.log(bot.chans);
+    // }
 
 });
 
@@ -40,29 +48,29 @@ bot.addListener('error', function(message) {
     console.log('error: ', message);
 });
 
-bot.addListener('+mode', function(channel, by, mode, argument, message) {
-	console.log(channel, by, mode, argument, message);
+// bot.addListener('+mode', function(channel, by, mode, argument, message) {
+// 	console.log(channel, by, mode, argument, message);
 
-	bot.whois(config.config['nick'], function(info) {
-		console.log(info);
+// 	bot.whois(config.config['nick'], function(info) {
+// 		console.log(info);
 
-		if (tools.isOp(info)) {
-			console.log('I am op');
-		}
-	});
-});
+// 		if (tools.isOp(info)) {
+// 			console.log('I am op');
+// 		}
+// 	});
+// });
 
-bot.addListener('-mode', function(channel, by, mode, argument, message) {
-	console.log(channel, by, mode, argument, message);
+// bot.addListener('-mode', function(channel, by, mode, argument, message) {
+// 	console.log(channel, by, mode, argument, message);
 
-	bot.whois(config.config['nick'], function(info) {
-		console.log(info);
+// 	bot.whois(config.config['nick'], function(info) {
+// 		console.log(info);
 
-		if (tools.isOp(info)) {
-			// bot.say(config.channel, 'I am op');
-			console.log('I am op');
-		} else {
-			console.log('I am not op');
-		}
-	});
-});
+// 		if (tools.isOp(info)) {
+// 			// bot.say(config.channel, 'I am op');
+// 			console.log('I am op');
+// 		} else {
+// 			console.log('I am not op');
+// 		}
+// 	});
+// });
