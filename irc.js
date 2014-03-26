@@ -2,15 +2,15 @@ var irc = require('irc');
 var tools = require('tools');
 var config = require('./config');
 
-var bot = new irc.Client(config.server, config.nick, {
+var bot = new irc.Client(config.config['server'], config.config['nick'], {
     autoConnect: false
 });
 
 bot.connect(10, function() {
 
-	bot.join(config.channel);
+	bot.join(config.config['channel']);
 
-	bot.whois(config.nick, function(info) {
+	bot.whois(config.config['nick'], function(info) {
 		console.log(info);
 	});
 
@@ -43,7 +43,7 @@ bot.addListener('error', function(message) {
 bot.addListener('+mode', function(channel, by, mode, argument, message) {
 	console.log(channel, by, mode, argument, message);
 
-	bot.whois(config.nick, function(info) {
+	bot.whois(config.config['nick'], function(info) {
 		console.log(info);
 
 		if (tools.isOp(info)) {
@@ -55,7 +55,7 @@ bot.addListener('+mode', function(channel, by, mode, argument, message) {
 bot.addListener('-mode', function(channel, by, mode, argument, message) {
 	console.log(channel, by, mode, argument, message);
 
-	bot.whois(config.nick, function(info) {
+	bot.whois(config.config['nick'], function(info) {
 		console.log(info);
 
 		if (tools.isOp(info)) {
