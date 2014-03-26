@@ -1,0 +1,16 @@
+{
+  "name": "chatbot",
+  "version": "0.0.5",
+  "description": "Simple IRC chatbot",
+  "main": "irc.js",
+  "dependencies": {
+    "irc": "~0.3.6",
+    "tools": "*"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ian Moffitt",
+  "license": "MIT"
+}
