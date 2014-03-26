@@ -1,17 +1,16 @@
 var irc = require('irc');
 var tools = require('tools');
-// var bot = new irc.Client('morgan.freenode.net', 'StachoBot', {
-//     channels: ['#nessthehero'],
-// });
-var bot = new irc.Client('morgan.freenode.net', 'StachoBot', {
+var config = require('./config');
+
+var bot = new irc.Client(config.server, config.nick, {
     autoConnect: false
 });
 
 bot.connect(10, function() {
 
-	bot.join('#nessthehero');
+	bot.join(config.channel);
 
-	bot.whois('StachoBot', function(info) {
+	bot.whois(config.nick, function(info) {
 		console.log(info);
 	});
 
@@ -44,11 +43,11 @@ bot.addListener('error', function(message) {
 bot.addListener('+mode', function(channel, by, mode, argument, message) {
 	console.log(channel, by, mode, argument, message);
 
-	bot.whois('StachoBot', function(info) {
+	bot.whois(config.nick, function(info) {
 		console.log(info);
 
 		if (tools.isOp(info)) {
-			bot.say('#nessthehero', 'I am op');
+			console.log('I am op');
 		}
 	});
 });
@@ -56,13 +55,14 @@ bot.addListener('+mode', function(channel, by, mode, argument, message) {
 bot.addListener('-mode', function(channel, by, mode, argument, message) {
 	console.log(channel, by, mode, argument, message);
 
-	bot.whois('StachoBot', function(info) {
+	bot.whois(config.nick, function(info) {
 		console.log(info);
 
 		if (tools.isOp(info)) {
-			bot.say('#nessthehero', 'I am op');
+			// bot.say(config.channel, 'I am op');
+			console.log('I am op');
 		} else {
-			bot.say('#nessthehero', 'I am not op');
+			console.log('I am not op');
 		}
 	});
 });
