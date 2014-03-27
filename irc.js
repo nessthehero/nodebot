@@ -3,7 +3,11 @@ var irc = require('irc');
 var config = require('./config');
 
 var bot = new irc.Client(config.config['server'], config.config['nick'], {
-    autoConnect: false
+    autoConnect: false,
+    floodProtection: true,
+    floodProtectionDelay: 1000,
+    stripColors: true,
+    realName: 'nodebot by ian'
 });
 
 var commands = require('./commands').init(bot);
@@ -18,7 +22,11 @@ bot.connect(10, function() {
 
 });
 
-bot.addListener('join', function () {
+bot.addListener('join', function (channel, nick, message) {
+
+    if (nick.toLowerCase() === "sstacho") {
+        bot.say(config.channel, "STACHO!!");
+    }
 
 });
 
@@ -26,16 +34,21 @@ bot.addListener('join', function () {
 bot.addListener('message', function (from, to, message) {
     console.log(from + ' => ' + to + ': ' + message);
 
-    if (message.match(/gimme a cat/i) != null) {
+    var called = false;
+
+    if (!called && message.match(/gimme a cat/i) != null) {
     	commands.cat(to);
+        called = true;
     }
 
-    if (message.match(/meow/i) != null) {
+    if (!called && message.match(/meow/i) != null) {
     	commands.emoji(to);
+        called = true;
     }
 
-    if (message.match(/^!pokemon|^!pokeman|^!pokeymans/i) != null) {
+    if (!called && message.match(/^!pokemon|^!pokeman|^!pokeymans/i) != null) {
     	commands.pokemon(to, message);
+        called = true;
     }
 
     // if (message.toLowerCase() == "!chans") {
