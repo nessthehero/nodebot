@@ -30,7 +30,7 @@ module.exports = {
 	"pokemon" : function (to, search) {
 
 		var msg = search.split(" ");
-		console.log(msg, msg[1], msg[1] != '');
+		// console.log(msg, msg[1], msg[1] != '');
 		var b = this.bot;
 		if (msg[1] !== '' && typeof msg[1] !== "undefined") {
 			// console.log(msg[0], parseInt(msg[1], 10), parseInt(msg[1], 10) != NaN);
