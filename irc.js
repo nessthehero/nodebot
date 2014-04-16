@@ -2,6 +2,10 @@ var irc = require('irc');
 
 var config = require('./config');
 
+var megahal = require('jsmegahal');
+
+var hal = new megahal(4);
+
 var bot = new irc.Client(config.config['server'], config.config['nick'], {
 	autoConnect: false,
 	floodProtection: true,
@@ -36,6 +40,10 @@ bot.addListener('message', function (from, to, message) {
 
 	var called = false;
 
+	var removeName = message.replace(/catbot/i, '');
+
+	hal.addMass(removeName);
+
 	if (!called && message.match(/gimme a cat/i) !== null) {
 		commands.cat(to);
 		called = true;
@@ -48,6 +56,11 @@ bot.addListener('message', function (from, to, message) {
 
 	if (!called && message.match(/^!pokemon|^!pokeman|^!pokeymans/i) !== null) {
 		commands.pokemon(to, message);
+		called = true;
+	}
+
+	if (!called && message.match(/catbot/i) !== null) {
+		bot.say(config.config['channel'], hal.getReply());
 		called = true;
 	}
 
