@@ -42,8 +42,6 @@ bot.addListener('message', function (from, to, message) {
 
 	var removeName = message.replace(/catbot/i, '');
 
-	hal.addMass(removeName);
-
 	if (!called && message.match(/gimme a cat/i) !== null) {
 		commands.cat(to);
 		called = true;
@@ -60,9 +58,11 @@ bot.addListener('message', function (from, to, message) {
 	}
 
 	if (!called && message.match(/catbot/i) !== null) {
-		bot.say(config.config['channel'], hal.getReply());
+		bot.say(config.config['channel'], hal.getReplyFromSentence(removeName));
 		called = true;
 	}
+
+	hal.addMass(removeName);
 
 });
 
