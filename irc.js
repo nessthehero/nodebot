@@ -40,6 +40,8 @@ bot.addListener('message', function (from, to, message) {
 
 	var called = false;
 
+	message += '.';
+
 	var removeName = message.replace(/catbot/i, '');
 
 	if (!called && message.match(/gimme a cat/i) !== null) {
